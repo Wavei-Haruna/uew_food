@@ -4,31 +4,31 @@ export const  NavItems = [
 {
     title:"Home",
     id:1,
-    link:'/'
+    to:'/'
 
 },
 {
     title:"Menu",
     id:2,
-    link:'/Menu'
-
-},
-{
-    title:"Riders",
-    id:3,
-    link:'/riders'
+    to:'/Menu'
 
 },
 {
     title:"How it Works",
-    id:5,
-    link:'/about-us'
+    id:3,
+    to:'/how-it-works'
 
 },
 {
     title:"Contact Us",
+    id:4,
+    to:'/contact-us'
+
+},
+{
+    title:"Administrator",
     id:5,
-    link:'/contact-us'
+    to:'/admin'
 
 }
 ]

@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { NavItems } from '../Utils';
+import { Link, useNavigate } from 'react-router-dom';
+import { NavItems } from '../Utils/NavItems';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
 import SignUp from '../Modals/SignUp';
+import Login from '../Modals/Login';
 
 export default function Navbar() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
-
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const navigate = useNavigate();
   return (
     <nav className='bg-primary p-2 z-50 font-menu text-s1 fixed w-full h-11 flex justify-between'>
       <button
@@ -37,14 +40,38 @@ export default function Navbar() {
         >
           {NavItems.map((item) => (
             <li key={item.id} className='transition-all transform duration-200 cursor-pointer text-s1 font-menu hover:bg-primary py-1 ease-in '>
-              {item.title}
+              <Link
+                onClick={(e) => {
+                  e.preventDefault();
+                   navigate(item.to)
+                   setIsNavOpen(false)
+
+
+                  let page = document.getElementById(item.title);
+                  const yOffset = -72;
+                  const y = page?.getBoundingClientRect()?.top + window.scrollY + yOffset;
+                  window.scrollTo({ top: y, behavior: 'smooth' });
+                }}
+                
+              >
+                {item.title}
+              </Link>
             </li>
           ))}
         </ul>
       </div>
-      <div>
+      <div className='flex items-center space-x-10'>
         <button
-          className='z-10 md:static px-3 py-1 bg-blue-500 h-fit text-white rounded-md text-center overflow-hidden hover:bg-blue-600'
+          className='z-10 md:static px-3 py-1 bg-white text-primary mr-8 border border-blue-500 h-fit font-semibold rounded-md text-center overflow-hidden hover:bg-blue-600'
+          onClick={() => setIsLoginOpen(true)}
+        >
+          Login
+        </button>
+        
+        {isLoginOpen && <Login onClose={() => setIsLoginOpen(false)} />}
+
+        <button
+          className='z-10 md:static px-3 py-1 font-semibold bg-blue-500 h-fit text-white rounded-md text-center overflow-hidden hover:bg-blue-600'
           onClick={() => setIsSignUpOpen(true)}
         >
           Register
