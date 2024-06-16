@@ -1,8 +1,11 @@
 import React from 'react';
 import backgroundImage from '../assets/Images/hero-bg.jpg'; 
+import Navbar from '../Components/Navbar';
 
 export default function Home() {
   return (
+    <div>
+      <Navbar/>
     <section className="h-screen bg-cover bg-center bg-no-repeat bg-opacity-50" style={{backgroundImage: `url(${backgroundImage})`}}>
 
       <div className="flex flex-col justify-center items-center h-full text-center text-white">
@@ -17,5 +20,7 @@ export default function Home() {
         </button>
       </div>
     </section>
+</div>
+
   );
 }
