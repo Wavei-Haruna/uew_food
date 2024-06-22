@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
  export default function CreateVendor() {
   const [formData, setFormData] = useState({
@@ -30,6 +31,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
         ...formData,
         createdAt: serverTimestamp(),
       });
+      toast.success("Vendor Created");
       setLoading(false);
       setFormData({
         name: '',

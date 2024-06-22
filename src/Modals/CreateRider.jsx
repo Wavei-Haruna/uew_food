@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 const CreateRider = () => {
   const [formData, setFormData] = useState({
@@ -30,6 +31,7 @@ const CreateRider = () => {
         ...formData,
         createdAt: serverTimestamp(),
       });
+      toast.success("Rider Created");
       setLoading(false);
       setFormData({
         name: '',
