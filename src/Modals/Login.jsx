@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '../firebase'; // Ensure db is imported from your Firebase config
 import Modal from './Modal';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 
 const Login = ({ onClose }) => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -31,10 +32,27 @@ const navigate = useNavigate();
     setLoading(true);
     setError(null);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      toast.success("bug successfully resolved go to bed");
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Fetch the user's role from Firestore
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        if (userData.role === 'admin') {
+          toast.success("Welcome Haruna");
+          navigate('/admin-dashboard'); // Navigate to admin dashboard if user is an admin
+        } else {
+          navigate('/dashboard'); // Navigate to user dashboard if user is not an admin
+        }
+        toast.success("Successfully logged in");
+      } else {
+        toast.error("User data not found");
+      }
+
       setLoading(false);
-      navigate('/dashboard')
       onClose(); // Close the modal after successful login
     } catch (error) {
       setError(error.message);
@@ -43,8 +61,7 @@ const navigate = useNavigate();
     }
   };
 
-//   Handle forgot password
-
+  // Handle forgot password
   const handleForgotPassword = async () => {
     if (!email) {
       toast.error("Please enter your email to reset password");
@@ -114,6 +131,7 @@ const navigate = useNavigate();
           </button>
         </p>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };

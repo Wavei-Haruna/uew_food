@@ -23,10 +23,10 @@ export const routes = [
         ]
       },
       {
-        path: 'admin',
+        path: 'admin-dashboard',
         element: <PrivateRoute allowedRoles={['admin']} />,
         children: [
-          { path: 'admin-dashboard', element: <AdminDashboard /> }
+          { path: '/admin-dashboard', element: <AdminDashboard /> }
         ]
       }
     

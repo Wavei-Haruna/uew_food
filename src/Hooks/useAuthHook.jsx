@@ -24,7 +24,6 @@ export function useAuthHook() {
             setUserRole(userDocSnap.data().role || 'user');
           } else {
             setUserRole('user'); // Default role if not found
-            console.log(userRole)
           }
         } catch (error) {
           console.error("Error fetching user role: ", error);
