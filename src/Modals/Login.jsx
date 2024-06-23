@@ -39,7 +39,7 @@ const Login = ({ onClose }) => {
       const userDocRef = doc(db, 'users', user.uid);
       const userDocSnap = await getDoc(userDocRef);
 
-      if (userDocSnap.exists()) 
+      if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
         if (userData.role === 'admin') {
           toast.success("Welcome Haruna");
