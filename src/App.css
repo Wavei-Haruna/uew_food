@@ -7,3 +7,11 @@
   scrollbar-width: none; /* For Firefox */
   -ms-overflow-style: none; /* For Internet Explorer and Edge */
 }
+
+/* AdminDashboard.css */
+
+@media (max-width: 768px) {
+  .sidebar-open {
+    margin-left: -250px; /* Adjust this value according to sidebar width */
+  }
+}

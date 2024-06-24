@@ -9,8 +9,7 @@ export default function PrivateRoute({ allowedRoles }) {
   if (checkingStatus) {
     return (
       <div className="absolute top-0 z-10 m-0 flex h-screen w-screen flex-col items-center justify-center bg-black bg-opacity-70">
-      Loading
-     
+        Loading
       </div>
     );
   }
@@ -22,7 +21,17 @@ export default function PrivateRoute({ allowedRoles }) {
 
   if (allowedRoles && !allowedRoles.includes(userRole)) {
     toast.warn('Unauthorized access');
-    return userRole === 'admin' ? <Navigate to="/admin-dashboard" /> : <Navigate to="/dashboard" />;
+
+    switch (userRole) {
+      case 'admin':
+        return <Navigate to="/admin-dashboard" />;
+      case 'vendor':
+        return <Navigate to="/vendor-dashboard" />;
+      case 'rider':
+        return <Navigate to="/rider-dashboard" />;
+      default:
+        return <Navigate to="/dashboard" />;
+    }
   }
 
   return <Outlet />;
