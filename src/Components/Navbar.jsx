@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { NavItems } from '../Utils/NavItems';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
-import SignUp from '../Modals/SignUp';
-import Login from '../Modals/Login';
+import SignUp from '../admin/SignUp';
+import Login from '../admin/Login';
 
 export default function Navbar() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -76,6 +76,7 @@ export default function Navbar() {
         >
           Register
         </button>
+       
         {isSignUpOpen && <SignUp onClose={() => setIsSignUpOpen(false)} />}
       </div>
     </nav>

@@ -8,9 +8,9 @@ export const  NavItems = [
 
 },
 {
-    title:"Menu",
+    title:"Order Food",
     id:2,
-    to:'/Menu'
+    to:'/order/create'
 
 },
 {
@@ -25,10 +25,4 @@ export const  NavItems = [
     to:'/contact-us'
 
 },
-{
-    title:"Administrator",
-    id:5,
-    to:'/admin'
-
-}
 ]

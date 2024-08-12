@@ -25,7 +25,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         pauseOnHover
         theme="dark"
       />
+    
       <RouterProvider router={router} />
     </AuthProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

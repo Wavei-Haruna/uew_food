@@ -1,29 +1,37 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuthHook } from '../Hooks/useAuthHook';
-import { toast } from 'react-toastify';
+import useAuth from '../Hooks/useAuth';
+import Swal from 'sweetalert2';
 
-export default function PrivateRoute({ allowedRoles }) {
-  const { isLoggedIn, checkingStatus, userRole } = useAuthHook();
-
-  if (checkingStatus) {
-    return (
-      <div className="absolute top-0 z-10 m-0 flex h-screen w-screen flex-col items-center justify-center bg-black bg-opacity-70">
-      Loading
-     
-      </div>
-    );
+const PrivateRoute = ({ requiredRole }) => {
+  const { currentUser, userRole, loading } = useAuth();
+  console.log('Private ROute is rendered')
+  if (loading) {
+    return <div className='text-black'>Loading...</div>; // You can replace this with your default loader
   }
 
-  if (!isLoggedIn) {
-    toast.warn('Please login');
-    return <Navigate to="/" />;
+  if (!currentUser) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Unauthorized',
+      text: 'You need to be logged in to access this page.',
+      showConfirmButton: true,
+    });
+    return <Navigate to="/signup" replace />;
   }
 
-  if (allowedRoles && !allowedRoles.includes(userRole)) {
-    toast.warn('Unauthorized access');
-    return userRole === 'admin' ? <Navigate to="/admin-dashboard" /> : <Navigate to="/dashboard" />;
+  // Check if the user's role matches the required role
+  if (requiredRole && userRole !== requiredRole) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Access Denied',
+      text: `You don't have the required permissions to access this page.`,
+      showConfirmButton: true,
+    });
+    return <Navigate to="/" replace />;
   }
 
   return <Outlet />;
-}
+};
+
+export default PrivateRoute;
