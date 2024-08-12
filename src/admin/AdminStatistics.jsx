@@ -95,7 +95,7 @@ const AdminStatistics = () => {
         <Loader />
       ) : (
         <div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid lg:grid-cols-3 gap-4">
             <div className="p-4 bg-white rounded shadow-md">
               <h3 className="text-xl font-bold mb-4 text-center flex items-center justify-center text-pink-600">
                 <FaUsers className="mr-2" /> Customers

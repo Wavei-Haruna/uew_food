@@ -1,9 +1,12 @@
 import React from 'react';
 import { FaTruck, FaListAlt, FaClipboardList, FaUserEdit } from 'react-icons/fa';
 
-const Sidebar = ({ activeTab, setActiveTab }) => {
+const Sidebar = ({ isSidebarOpen, activeTab, setActiveTab }) => {
   return (
-    <div className="w-64 bg-yellow-900 flex flex-col justify-between items-center text-white">
+    <div
+      className={`fixed inset-y-0 left-0 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
+        md:translate-x-0 md:relative w-64 bg-yellow-900 flex flex-col justify-between items-center text-white transition-transform duration-300 ease-in-out`}
+    >
       <div className="p-6">
         <h2 className="text-2xl font-bold">Rider Dashboard</h2>
         <ul className="mt-6">
