@@ -9,13 +9,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
       <div className="p-6 ">
         <h2 className="text-2xl font-bold">Vendor Dashboard</h2>
         <ul className="mt-6">
-          <li
-            className={`p-3 rounded cursor-pointer flex items-center ${activeTab === 'inventory' ? 'bg-green-700' : 'hover:bg-green-800'}`}
-            onClick={() => setActiveTab('inventory')}
-          >
-            <FaBoxOpen className="mr-2" />
-            Manage Inventory
-          </li>
+         
           <li
             className={`p-3 rounded cursor-pointer flex items-center ${activeTab === 'orders' ? 'bg-green-700' : 'hover:bg-green-800'}`}
             onClick={() => setActiveTab('orders')}

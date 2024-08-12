@@ -3,8 +3,9 @@ import Sidebar from './Sidebar';
 import ManageOrders from './ManageItems'; // Placeholder component for managing orders
 
 // import ProfileSettings from './ProfileSettings'; // Placeholder component for updating profile
-import Statistics from './Statistics';
+
 import ProfileSettings from './ProfileSettings';
+import StatisticsPage from './StatisticsPage';
 
 const VendorDashboard = () => {
   const [activeTab, setActiveTab] = useState('inventory');
@@ -17,7 +18,7 @@ const VendorDashboard = () => {
         {activeTab === 'orders' && <ManageOrders />}
         {/* {activeTab === 'reports' && <GenerateReports />} */}
         {activeTab === 'settings' && <ProfileSettings />}
-        {activeTab === 'statistics' && <Statistics />}
+        {activeTab === 'statistics' && <StatisticsPage />}
       </div>
     </div>
   );

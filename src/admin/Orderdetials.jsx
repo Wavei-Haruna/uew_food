@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, query, where, doc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, query, where, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import Swal from 'sweetalert2';
 import Loader from '../Components/Loader';
@@ -95,6 +95,30 @@ const OrderDetails = () => {
     }
   };
 
+  const handleDelete = async (orderId) => {
+    try {
+      const orderRef = doc(db, 'orders', orderId);
+      await deleteDoc(orderRef);
+      
+      setOrders(orders.filter(order => order.id !== orderId));
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Order Deleted',
+        text: 'The order has been successfully deleted.',
+        showConfirmButton: true,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error Deleting Order',
+        text: error.message,
+        showConfirmButton: true,
+      });
+      console.log(error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-full font-menu">
@@ -119,9 +143,8 @@ const OrderDetails = () => {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
               <p className="text-sm text-gray-600">Customer Name</p>
-              <p className="text-lg font-medium  font-menu text-primary">{order.customerName}</p>
-              <p className="text-lg font-medium  font-menu text-primary">{order.itemName
-                }</p>
+              <p className="text-lg font-medium font-menu text-primary">{order.customerName}</p>
+              <p className="text-lg font-medium font-menu text-primary">{order.itemName}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Customer ID</p>
@@ -144,28 +167,36 @@ const OrderDetails = () => {
               <p className="text-lg font-medium text-gray-500 font-menu">{order.orderStatus}</p>
             </div>
           </div>
-          <div className="mt-4">
-            <label htmlFor="riderSelect" className="block text-sm font-medium text-gray-700">
-              Assign to Rider
-            </label>
-            <select
-              id="riderSelect"
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-              value={selectedRider}
-              onChange={(e) => setSelectedRider(e.target.value)}
-            >
-              <option value="">Select a Rider</option>
-              {riders.map((rider) => (
-                <option key={rider.id} value={rider.id}>
-                  {rider.name}
-                </option>
-              ))}
-            </select>
+          <div className="mt-4 flex justify-between">
+            <div>
+              <label htmlFor="riderSelect" className="block text-sm font-medium text-gray-700">
+                Assign to Rider
+              </label>
+              <select
+                id="riderSelect"
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                value={selectedRider}
+                onChange={(e) => setSelectedRider(e.target.value)}
+              >
+                <option value="">Select a Rider</option>
+                {riders.map((rider) => (
+                  <option key={rider.id} value={rider.id}>
+                    {rider.name}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={() => handleAssign(order.id)}
+                className="mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Assign Order
+              </button>
+            </div>
             <button
-              onClick={() => handleAssign(order.id)}
-              className="mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              onClick={() => handleDelete(order.id)}
+              className="mt-4 h-8 w-full sm:w-auto inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
-              Assign Order
+              Delete Order
             </button>
           </div>
         </div>
