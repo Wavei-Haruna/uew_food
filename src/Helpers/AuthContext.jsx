@@ -1,48 +1,69 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { onAuthStateChanged, getAuth} from 'firebase/auth';
+import React, { createContext, useState, useEffect } from 'react';
+import { auth, db } from '../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
-const AuthContext = React.createContext();
+// Create a context for authentication
+const AuthContext = createContext();
 
-
-const auth = getAuth();
-
-export function useAuth() {
-  return useContext(AuthContext);
-}
-// below ia our provider function
-export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+// AuthProvider component to provide authentication state to the entire app
+const AuthProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(null); // State to hold the current user
+  const [userRole, setUserRole] = useState(null); // State to hold user role
+  const [loading, setLoading] = useState(true); // State to manage loading state
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
+    // Set up an authentication state observer and get user data
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          // Reference to the user document in Firestore
+          const userDocRef = doc(db, 'users', user.uid);
+          // Fetch the user document
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const fetchedUserRole = userData.role || 'user'; // Default role if not found
+            console.log('User role fetched:', fetchedUserRole); // Log user role
+            setCurrentUser({ ...user, role: fetchedUserRole });
+            setUserRole(fetchedUserRole); // Set user role
+          } else {
+            console.error('No such document!');
+            setCurrentUser(null);
+            setUserRole(null);
+          }
+        } catch (error) {
+          console.error('Error fetching user document:', error);
+          setCurrentUser(null);
+          setUserRole(null);
+        }
+      } else {
+        // No user is signed in
+        setCurrentUser(null);
+        setUserRole(null);
+      }
+      // Set loading to false once the user data is fetched
+      setLoading(false);
     });
 
+    // Clean up the observer on unmount
     return unsubscribe;
   }, []);
 
+  // Value to be passed down through the context
   const value = {
     currentUser,
+    userRole,
+    loading,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
+  return (
+    // Provide the authentication state to children components
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
+};
 
-
-// import { getAuth, onAuthStateChanged } from 'firebase/auth';
-// import React, { useEffect, useState } from 'react';
-
-// export function useAuthHook() {
-//   const auth = getAuth();
-//   const [isLoggedIn, setIsLoggedIn] = useState(false);
-//   const [checkingStatus, setCheckingStatus] = useState(true);
-//   useEffect(() => {
-//     onAuthStateChanged(auth, (user) => {
-//       if (user) {
-//         setIsLoggedIn(true);
-//       }
-//       setCheckingStatus(false);
-//     });
-//   }, [auth]);
-//   return { isLoggedIn, checkingStatus };
-// }
+export { AuthProvider, AuthContext };
