@@ -1,5 +1,6 @@
 import React from 'react';
-import { FaBoxOpen, FaListAlt, FaClipboardList, FaUserEdit, FaGear } from 'react-icons/fa';
+import { FaBoxOpen, FaListAlt, FaClipboardList, FaUserEdit,  } from 'react-icons/fa';
+import { FaGear } from 'react-icons/fa6';
 import { GrAnalytics } from 'react-icons/gr';
 
 const Sidebar = ({ isSidebarOpen, activeTab, setActiveTab }) => {
