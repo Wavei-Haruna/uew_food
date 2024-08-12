@@ -70,19 +70,19 @@ const SignUp = ({ onClose }) => {
       // Store the user data in Firestore using the user's UID as the document ID
       await setDoc(doc(db, 'users', user.uid), userData);
 
-      toast.success("Account created");
+      toast.success("Account created Kindly login");
 
       // Redirect based on role
-      if (role === 'Vendor') {
-        navigate('/vendor/dashboard');
-      } else if (role === 'Rider') {
-        navigate('/rider/dashboard');
-      } else if (role === 'Admin') {
-        navigate('/admin/dashboard');
-      } else if (role === 'Customer') {
-        navigate('/menu');
-      }
-
+      // if (role === 'Vendor') {
+      //   navigate('/vendor/dashboard');
+      // } else if (role === 'Rider') {
+      //   navigate('/rider/dashboard');
+      // } else if (role === 'Admin') {
+      //   navigate('/admin/dashboard');
+      // } else if (role === 'Customer') {
+      //   navigate('/orders/create');
+      // }
+        navigate('/')
       setLoading(false);
       onClose(); // Close the modal after successful sign-up
 
@@ -95,7 +95,7 @@ const SignUp = ({ onClose }) => {
 
   return (
     <div className="flex items-center justify-center bg-gray-100">
-      <Modal isVisible={true} onClose={onClose}>
+      <Modal isVisible={true} onClose={onClose} >
         {isLogin ? (
           <Login onClose={onClose} />
         ) : (

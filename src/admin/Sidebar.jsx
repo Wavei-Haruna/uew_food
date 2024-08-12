@@ -7,7 +7,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
       <div className="p-6 ">
         <h2 className="text-2xl font-bold">Admin Dashboard</h2>
         <ul className="mt-6">
-          <li
+          {/* <li
             className={`p-3 rounded cursor-pointer flex items-center ${activeTab === 'vendors' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
             onClick={() => setActiveTab('vendors')}
           >
@@ -20,6 +20,14 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           >
             <FaTruck className="mr-2" />
             Manage Riders
+          </li> */}
+
+<li
+            className={`p-3 rounded cursor-pointer flex items-center ${activeTab === 'reports' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
+            onClick={() => setActiveTab('reports')}
+          >
+            <FaClipboardList className="mr-2" />
+            Overview
           </li>
           <li
             className={`p-3 rounded cursor-pointer flex items-center ${activeTab === 'orders' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
@@ -35,13 +43,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
             <FaBoxOpen className="mr-2" />
             Inventory
           </li>
-          <li
-            className={`p-3 rounded cursor-pointer flex items-center ${activeTab === 'reports' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
-            onClick={() => setActiveTab('reports')}
-          >
-            <FaClipboardList className="mr-2" />
-            Reports
-          </li>
+         
         </ul>
         {/* Other Settings */}
         <div className=" mt-16">
@@ -52,13 +54,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
             <FaUserEdit className="mr-2" />
             Update Profile
           </h3>
-          <h3
-            className={`p-3 rounded cursor-pointer flex items-center ${activeTab === 'signout' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
-            onClick={() => setActiveTab('signout')}
-          >
-            <FaSignOutAlt className="mr-2" />
-            Profile
-          </h3>
+         
         </div>
       </div>
     </div>

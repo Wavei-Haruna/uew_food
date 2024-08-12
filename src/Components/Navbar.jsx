@@ -4,6 +4,7 @@ import { NavItems } from '../Utils/NavItems';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
 import SignUp from '../admin/SignUp';
 import Login from '../admin/Login';
+import Logo from '../assets/Images/logo.png'
 
 export default function Navbar() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -11,7 +12,7 @@ export default function Navbar() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const navigate = useNavigate();
   return (
-    <nav className='bg-primary p-2 z-50 font-menu text-s1 fixed w-full h-11 flex justify-between'>
+    <nav className='bg-primary p-2 z-50 font-menu text-s1 fixed w-full h-11 flex justify-around'>
       <button
         className='md:hidden'
         onClick={() => setIsNavOpen(!isNavOpen)}
@@ -60,9 +61,10 @@ export default function Navbar() {
           ))}
         </ul>
       </div>
-      <div className='flex items-center space-x-10'>
+      <div className='flex items-center space-x-8'>
+        <img src={Logo} alt="Logo" className='h-8' />
         <button
-          className='z-10 md:static px-3 py-1 bg-white text-primary mr-8 border border-blue-500 h-fit font-semibold rounded-md text-center overflow-hidden hover:bg-blue-600'
+          className='z-10 md:static w-32 px-3 py-1 bg-white text-primary mr-8 border border-blue-500 h-fit font-semibold rounded-md text-center overflow-hidden hover:bg-blue-600'
           onClick={() => setIsLoginOpen(true)}
         >
           Login
@@ -71,7 +73,7 @@ export default function Navbar() {
         {isLoginOpen && <Login onClose={() => setIsLoginOpen(false)} />}
 
         <button
-          className='z-10 md:static px-3 py-1 font-semibold bg-blue-500 h-fit text-white rounded-md text-center overflow-hidden hover:bg-blue-600'
+          className='z-10 md:static px-3 py-1 font-semibold w-32 bg-blue-500 h-fit text-white rounded-md text-center overflow-hidden hover:bg-blue-600'
           onClick={() => setIsSignUpOpen(true)}
         >
           Register

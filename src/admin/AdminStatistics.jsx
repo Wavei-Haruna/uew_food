@@ -4,32 +4,44 @@ import { db } from '../firebase';
 import { useNavigate } from 'react-router';
 import { ToastContainer, toast } from 'react-toastify';
 import { FaUsers, FaStore, FaMotorcycle } from 'react-icons/fa';
+import { Bar } from 'react-chartjs-2';
 import Loader from '../Components/Loader';
 import Swal from 'sweetalert2';
+import 'chart.js/auto';
 
 const AdminStatistics = () => {
   const [users, setUsers] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchData = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'users'));
-        const usersData = querySnapshot.docs.map(doc => ({
+        const userSnapshot = await getDocs(collection(db, 'users'));
+        const orderSnapshot = await getDocs(collection(db, 'orders'));
+
+        const usersData = userSnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
         }));
+
+        const ordersData = orderSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
         setUsers(usersData);
+        setOrders(ordersData);
       } catch (error) {
-        console.error('Error fetching users:', error);
-        toast.error('Failed to fetch users');
+        console.error('Error fetching data:', error);
+        toast.error('Failed to fetch data');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUsers();
+    fetchData();
   }, []);
 
   const handleDeleteUser = async (userId) => {
@@ -60,16 +72,32 @@ const AdminStatistics = () => {
     return acc;
   }, {});
 
+  const orderStatuses = orders.reduce((acc, order) => {
+    acc[order.orderStatus] = (acc[order.orderStatus] || 0) + 1;
+    return acc;
+  }, {});
+
+  const chartData = {
+    labels: Object.keys(orderStatuses),
+    datasets: [
+      {
+        label: 'Orders',
+        data: Object.values(orderStatuses),
+        backgroundColor: ['#36a2eb', '#ff6384', '#4bc0c0', '#ff9f40'],
+      },
+    ],
+  };
+
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-6 text-center text-primary">Admin Dashboard - User Statistics</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center text-pink-500">Admin Dashboard - User & Order Statistics</h2>
       {loading ? (
         <Loader />
       ) : (
         <div>
           <div className="grid grid-cols-3 gap-4">
             <div className="p-4 bg-white rounded shadow-md">
-              <h3 className="text-xl font-bold mb-4 text-center flex items-center justify-center">
+              <h3 className="text-xl font-bold mb-4 text-center flex items-center justify-center text-pink-600">
                 <FaUsers className="mr-2" /> Customers
               </h3>
               {groupedUsers.Customer?.length ? (
@@ -92,7 +120,7 @@ const AdminStatistics = () => {
             </div>
 
             <div className="p-4 bg-white rounded shadow-md">
-              <h3 className="text-xl font-bold mb-4 text-center flex items-center justify-center">
+              <h3 className="text-xl font-bold mb-4 text-center flex items-center justify-center text-pink-600">
                 <FaStore className="mr-2" /> Vendors
               </h3>
               {groupedUsers.Vendor?.length ? (
@@ -115,7 +143,7 @@ const AdminStatistics = () => {
             </div>
 
             <div className="p-4 bg-white rounded shadow-md">
-              <h3 className="text-xl font-bold mb-4 text-center flex items-center justify-center">
+              <h3 className="text-xl font-bold mb-4 text-center flex items-center justify-center text-pink-600">
                 <FaMotorcycle className="mr-2" /> Riders
               </h3>
               {groupedUsers.Rider?.length ? (
@@ -136,6 +164,11 @@ const AdminStatistics = () => {
                 <p>No riders found.</p>
               )}
             </div>
+          </div>
+
+          <div className="mt-8 p-4 bg-white rounded shadow-md">
+            <h3 className="text-xl font-bold mb-4 text-center">Order Status Overview</h3>
+            <Bar data={chartData} />
           </div>
         </div>
       )}

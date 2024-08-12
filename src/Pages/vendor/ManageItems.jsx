@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db, storage } from '../../firebase';
-import { collection, addDoc, updateDoc, doc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Loader from '../../Components/Loader';
 import Swal from 'sweetalert2';
@@ -17,13 +17,15 @@ const ManageItems = () => {
 
   useEffect(() => {
     const fetchItems = async () => {
-      if (authLoading) {
-        return; // Wait until auth loading is done
+      if (authLoading || !currentUser) {
+        return; // Wait until auth loading is done or currentUser is available
       }
 
       setLoading(true); // Start loading when fetching items
       try {
-        const querySnapshot = await getDocs(collection(db, 'items'));
+        // Create a query to fetch only the items created by the current user
+        const itemsQuery = query(collection(db, 'items'), where('createdBy', '==', currentUser.uid));
+        const querySnapshot = await getDocs(itemsQuery);
         const itemsList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setItems(itemsList);
       } catch (error) {
@@ -39,7 +41,7 @@ const ManageItems = () => {
     };
 
     fetchItems();
-  }, [authLoading]);
+  }, [authLoading, currentUser]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -56,13 +58,13 @@ const ManageItems = () => {
   const handleAddItem = async (e) => {
     e.preventDefault();
 
-    if (authLoading || !userRole) {
+    if (authLoading || !userRole || !currentUser) {
       Swal.fire({
         icon: 'error',
         title: 'Not Authenticated',
         text: 'You are not authenticated yet. Please wait or reload the page.',
       });
-      return; // Prevent adding if role is not ready
+      return; // Prevent adding if role or currentUser is not ready
     }
 
     if (userRole !== 'admin' && userRole !== 'Vendor') {
@@ -99,7 +101,8 @@ const ManageItems = () => {
       setNewItem({ name: '', description: '', price: '', picture: '' });
       setImageFile(null);
       // Fetch updated items
-      const querySnapshot = await getDocs(collection(db, 'items'));
+      const itemsQuery = query(collection(db, 'items'), where('createdBy', '==', currentUser.uid));
+      const querySnapshot = await getDocs(itemsQuery);
       const itemsList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setItems(itemsList);
     } catch (error) {
@@ -115,13 +118,13 @@ const ManageItems = () => {
   };
 
   const handleUpdateItem = async (id) => {
-    if (authLoading || !userRole) {
+    if (authLoading || !userRole || !currentUser) {
       Swal.fire({
         icon: 'error',
         title: 'Not Authenticated',
         text: 'You are not authenticated yet. Please wait or reload the page.',
       });
-      return; // Prevent updating if role is not ready
+      return; // Prevent updating if role or currentUser is not ready
     }
 
     if (userRole !== 'admin' && userRole !== 'Vendor') {
@@ -155,7 +158,8 @@ const ManageItems = () => {
         text: 'The item has been updated successfully.',
       });
       // Fetch updated items
-      const querySnapshot = await getDocs(collection(db, 'items'));
+      const itemsQuery = query(collection(db, 'items'), where('createdBy', '==', currentUser.uid));
+      const querySnapshot = await getDocs(itemsQuery);
       const itemsList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setItems(itemsList);
       setEditItem(null);
@@ -233,71 +237,24 @@ const ManageItems = () => {
                       <h4 className="text-md font-semibold mb-1">Item ID: {item.id}</h4>
                       <p className="text-gray-600">Name: {item.name}</p>
                       <p className="text-gray-600">Description: {item.description}</p>
-                      <p className="text-gray-600">Price: <FaCediSign/>{item.price}</p>
+                      <p className="text-gray-600">Price: <FaCediSign className="inline" />{item.price}</p>
+                      <img src={item.picture} alt={item.name} className="w-32 h-32 object-cover mt-2" />
                     </div>
-                    {item.picture && (
-                      <img
-                        src={item.picture}
-                        alt={item.name}
-                        className="w-32 h-32 object-cover mt-4 sm:mt-0 sm:ml-4 rounded"
-                      />
-                    )}
-                  </div>
-                  <button
-                    onClick={() => setEditItem(item)}
-                    className="bg-yellow-500 text-white mt-4 px-4 py-2 rounded hover:bg-yellow-600 transition duration-300"
-                  >
-                    Edit
-                  </button>
-                  {editItem && editItem.id === item.id && (
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        handleUpdateItem(item.id);
-                      }}
-                      className="mt-4 bg-gray-50 p-4 rounded-lg"
-                    >
-                      <input
-                        type="text"
-                        name="name"
-                        value={editItem.name}
-                        onChange={(e) => setEditItem({ ...editItem, name: e.target.value })}
-                        placeholder="Name"
-                        className="block w-full mb-2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                      />
-                      <input
-                        type="text"
-                        name="description"
-                        value={editItem.description}
-                        onChange={(e) => setEditItem({ ...editItem, description: e.target.value })}
-                        placeholder="Description"
-                        className="block w-full mb-2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                      />
-                      <input
-                        type="number"
-                        name="price"
-                        value={editItem.price}
-                        onChange={(e) => setEditItem({ ...editItem, price: e.target.value })}
-                        placeholder="Price"
-                        className="block w-full mb-2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                      />
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setImageFile(e.target.files[0])}
-                        className="block w-full mb-4 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
+                    <div className="flex space-x-2 mt-4 sm:mt-0">
                       <button
-                        type="submit"
+                        onClick={() => setEditItem(item)}
+                        className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition duration-300"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleUpdateItem(item.id)}
                         className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300"
                       >
-                        Update Item
+                        Update
                       </button>
-                    </form>
-                  )}
+                    </div>
+                  </div>
                 </li>
               ))}
             </ul>

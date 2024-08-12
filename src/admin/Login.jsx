@@ -37,7 +37,7 @@ const Login = ({ onClose }) => {
             navigate('/admin/dashboard');
           } else if (role === 'Vendor') {
             navigate('/vendor/dashboard');
-          } else if (role === 'rider') {
+          } else if (role === 'Rider') {
             navigate('/rider/dashboard');
           } else {
             navigate('/'); // Default redirect if no matching role
