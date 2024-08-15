@@ -8,7 +8,10 @@ import VendorDashboard from './Pages/vendor/VendorDashboard';
 import RiderDashboard from './Pages/riders/Riderdashboard';
 import CreateOrderPage from './Pages/orders/CreateOrder';
 import PrivateRoute from './Components/PrivateRoute'; // Adjust path if necessary
+import Navbar from './Components/Navbar';
 
+
+<Navbar/>
 export const routes = [
   {
     path: '/',
