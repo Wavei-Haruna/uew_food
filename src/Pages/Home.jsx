@@ -16,7 +16,7 @@ export default function Home() {
           <motion.h1 
             className="lg:text-5xl text-2xl z-10 font-bold mb-6 font-primary text-white"
             initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
             Welcome to <span className="text-blue-500">AAMUSTED</span><span className="text-yellow-500">OnlineFood</span>
@@ -24,7 +24,7 @@ export default function Home() {
           <motion.p 
             className="text-lg z-10 mb-8"
             initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             Discover, Order, and Enjoy Delicious Meals with Ease
@@ -46,7 +46,7 @@ export default function Home() {
           <motion.div 
             className="grid md:grid-cols-3 gap-8"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8, staggerChildren: 0.3 }}
           >
             <motion.div className="bg-white rounded-lg shadow-lg p-8 text-center">
@@ -75,7 +75,7 @@ export default function Home() {
           <motion.div 
             className="grid md:grid-cols-3 gap-8"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8, staggerChildren: 0.3 }}
           >
             <motion.div className="bg-blue-600 text-white rounded-lg shadow-lg p-8">
@@ -101,7 +101,7 @@ export default function Home() {
           <motion.div 
             className="grid md:grid-cols-2 gap-8"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8, staggerChildren: 0.3 }}
           >
             <motion.div className="bg-blue-600 rounded-lg p-8 shadow-lg">
@@ -138,7 +138,7 @@ export default function Home() {
           <motion.p 
             className="text-lg text-gray-700 mb-6"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
           >
             At AAMUSTED OnlineFood, we are dedicated to bringing you the best food ordering experience. Whether you're a student, staff, or visitor, our platform allows you to explore a wide variety of meals from local vendors. We prioritize quality, convenience, and customer satisfaction, making food delivery a breeze.
@@ -146,7 +146,7 @@ export default function Home() {
           <motion.p 
             className="text-lg text-gray-700"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             Join us in our mission to create a seamless food ordering experience that connects you with your favorite meals at the touch of a button.
@@ -161,9 +161,9 @@ export default function Home() {
             Contact Us
           </h2>
           <motion.div 
-            className="flex justify-center items-center space-x-8"
+            className="md:flex justify-center items-center space-x-8"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
           >
             <motion.div className="text-center">
@@ -188,7 +188,7 @@ export default function Home() {
           <motion.div 
             className="flex justify-center space-x-6 mb-4"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8, staggerChildren: 0.3 }}
           >
             <motion.a 
