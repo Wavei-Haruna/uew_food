@@ -3,7 +3,10 @@ import { motion } from 'framer-motion';
 import { FaAllergies, FaFastForward, FaGoodreads } from 'react-icons/fa';
 import backgroundImage from '../assets/Images/hero-bg.jpg';
 import Navbar from '../Components/Navbar';
-
+import { Link } from 'react-router-dom';
+import Sadat from '../assets/Images/sadat.jpg'
+import Richard from '../assets/Images/richard.jpg'
+import Haruna from '../assets/Images/haruna.jpg'
 export default function Home() {
   return (
     <div>
@@ -29,13 +32,13 @@ export default function Home() {
           >
             Discover, Order, and Enjoy Delicious Meals with Ease
           </motion.p>
-          <motion.button 
+          <Link to={'/signup'}
             className="px-8 z-10 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             Get Started
-          </motion.button>
+          </Link>
         </div>
       </section>
 
@@ -67,6 +70,57 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+      {/* Team Section */}
+      <section className="py-16 bg-gray-50">
+      <div className="container mx-auto px-4">
+        <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">Our Team</h2>
+        <motion.div
+          className="grid md:grid-cols-3 gap-8"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8, staggerChildren: 0.3 }}
+        >
+          <motion.div
+            className="bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-xl shadow-lg p-8 text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+            whileHover={{ scale: 1.05 }}
+          >
+            <img
+              src={Haruna}
+              alt="Sadat Sulemani Aboagye"
+              className="w-24 h-24 mx-auto rounded-full mb-6 border-4 border-pink-600"
+            />
+            <h3 className="text-2xl font-semibold mb-2 text-gray-800">Haruna Wavei</h3>
+            <p className="text-gray-600">Level 400, Index Number 5201040200</p>
+          </motion.div>
+
+          <motion.div
+            className="bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-xl shadow-lg p-8 text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+            whileHover={{ scale: 1.05 }}
+          >
+            <img
+              src={Richard}
+              alt="Richard"
+              className="w-24 h-24 mx-auto rounded-full mb-6 border-4 border-pink-600"
+            />
+            <h3 className="text-2xl font-semibold mb-2 text-gray-800">Richard Agyekum</h3>
+            <p className="text-gray-600">Level 400, Index Number 5201040194</p>
+          </motion.div>
+
+          <motion.div
+            className="bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-xl shadow-lg p-8 text-center transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+            whileHover={{ scale: 1.05 }}
+          >
+            <img
+              src={Sadat}
+              alt="Sadat Sulemani Aboagye"
+              className="w-24 h-24 mx-auto rounded-full mb-6 border-4 border-pink-600"
+            />
+            <h3 className="text-2xl font-semibold mb-2 text-gray-800">Sadat Sulemani Aboagye</h3>
+            <p className="text-gray-600">Level 400, Index Number 5201040146</p>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
 
       {/* Statistics Section */}
       <section className="py-16 bg-white">

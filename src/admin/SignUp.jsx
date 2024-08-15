@@ -227,7 +227,6 @@ const SignUp = ({ onClose }) => {
                 >
                   <option value="Vendor">Vendor</option>
                   <option value="Rider">Rider</option>
-                  <option value="Admin">Admin</option>
                   <option value="Customer">Customer</option>
                 </select>
               </div>

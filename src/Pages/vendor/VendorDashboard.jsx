@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import { FaBars, FaHome, FaTimes } from 'react-icons/fa';
 import Sidebar from './Sidebar';
 import ManageOrders from './ManageItems'; // Placeholder component for managing orders
 import ProfileSettings from './ProfileSettings';
 import StatisticsPage from './StatisticsPage';
 import Navbar from '../../Components/Navbar';
+import { Link } from 'react-router-dom';
 
 const VendorDashboard = () => {
   const [activeTab, setActiveTab] = useState('inventory');
@@ -30,6 +31,12 @@ const VendorDashboard = () => {
       >
         {isSidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
       </button>
+
+      
+      <Link to={'/'} className='flex space-x-1'>
+          <FaHome className='text-white text-2lx'/> Home
+        
+        </Link>
     </div>
   );
 };

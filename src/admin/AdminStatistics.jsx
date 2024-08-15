@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { useNavigate } from 'react-router';
 import { ToastContainer, toast } from 'react-toastify';
-import { FaUsers, FaStore, FaMotorcycle } from 'react-icons/fa';
 import { Bar } from 'react-chartjs-2';
 import Loader from '../Components/Loader';
 import Swal from 'sweetalert2';
@@ -13,7 +11,6 @@ const AdminStatistics = () => {
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,7 +74,18 @@ const AdminStatistics = () => {
     return acc;
   }, {});
 
-  const chartData = {
+  const userChartData = {
+    labels: Object.keys(groupedUsers),
+    datasets: [
+      {
+        label: 'Users by Role',
+        data: Object.values(groupedUsers).map(group => group.length),
+        backgroundColor: ['#4bc0c0', '#ff9f40', '#ff6384'],
+      },
+    ],
+  };
+
+  const orderChartData = {
     labels: Object.keys(orderStatuses),
     datasets: [
       {
@@ -90,85 +98,56 @@ const AdminStatistics = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-6 text-center text-pink-500">Admin Dashboard - User & Order Statistics</h2>
+      <h2 className="text-3xl font-bold mb-8 text-center text-blue-600">Admin Dashboard - Statistics Overview</h2>
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <div className="grid lg:grid-cols-3 gap-4">
-            <div className="p-4 bg-white rounded shadow-md">
-              <h3 className="text-xl font-bold mb-4 text-center flex items-center justify-center text-pink-600">
-                <FaUsers className="mr-2" /> Customers
-              </h3>
-              {groupedUsers.Customer?.length ? (
-                <ul>
-                  {groupedUsers.Customer.map(user => (
-                    <li key={user.id} className="mb-2 flex justify-between items-center">
-                      <span>{user.name} ({user.email})</span>
-                      <button
-                        onClick={() => handleDeleteUser(user.id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        Delete
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No customers found.</p>
-              )}
+          {/* Responsive Layout */}
+          <div className="grid lg:grid-cols-2 gap-6">
+            <div className="p-6 bg-white rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold mb-4 text-center">User Distribution</h3>
+              <Bar data={userChartData} />
             </div>
 
-            <div className="p-4 bg-white rounded shadow-md">
-              <h3 className="text-xl font-bold mb-4 text-center flex items-center justify-center text-pink-600">
-                <FaStore className="mr-2" /> Vendors
-              </h3>
-              {groupedUsers.Vendor?.length ? (
-                <ul>
-                  {groupedUsers.Vendor.map(user => (
-                    <li key={user.id} className="mb-2 flex justify-between items-center">
-                      <span>{user.name} ({user.email})</span>
-                      <button
-                        onClick={() => handleDeleteUser(user.id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        Delete
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No vendors found.</p>
-              )}
-            </div>
-
-            <div className="p-4 bg-white rounded shadow-md">
-              <h3 className="text-xl font-bold mb-4 text-center flex items-center justify-center text-pink-600">
-                <FaMotorcycle className="mr-2" /> Riders
-              </h3>
-              {groupedUsers.Rider?.length ? (
-                <ul>
-                  {groupedUsers.Rider.map(user => (
-                    <li key={user.id} className="mb-2 flex justify-between items-center">
-                      <span>{user.name} ({user.email})</span>
-                      <button
-                        onClick={() => handleDeleteUser(user.id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        Delete
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No riders found.</p>
-              )}
+            <div className="p-6 bg-white rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold mb-4 text-center">Order Status Overview</h3>
+              <Bar data={orderChartData} />
             </div>
           </div>
 
-          <div className="mt-8 p-4 bg-white rounded shadow-md">
-            <h3 className="text-xl font-bold mb-4 text-center">Order Status Overview</h3>
-            <Bar data={chartData} />
+          {/* User Table */}
+          <div className="mt-8">
+            <h3 className="text-xl font-semibold mb-4 text-center">Manage Users</h3>
+            <div className="overflow-x-auto bg-white rounded-lg shadow-md">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {users.map(user => (
+                    <tr key={user.id}>
+                      <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{user.role}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button
+                          onClick={() => handleDeleteUser(user.id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}

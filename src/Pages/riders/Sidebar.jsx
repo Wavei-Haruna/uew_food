@@ -1,5 +1,6 @@
 import React from 'react';
-import { FaTruck, FaListAlt, FaClipboardList, FaUserEdit } from 'react-icons/fa';
+import { FaTruck, FaListAlt, FaClipboardList, FaUserEdit, FaHome } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Sidebar = ({ isSidebarOpen, activeTab, setActiveTab }) => {
   return (
@@ -41,6 +42,12 @@ const Sidebar = ({ isSidebarOpen, activeTab, setActiveTab }) => {
             Profile Settings
           </h3>
         </div>
+
+         
+        <Link to={'/'} className='flex space-x-1 items-center'>
+          <FaHome className='text-white text-2lx mr-2'/> Home
+        
+        </Link>
       </div>
     </div>
   );

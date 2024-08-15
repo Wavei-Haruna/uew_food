@@ -1,7 +1,8 @@
 import React from 'react';
-import { FaBoxOpen, FaListAlt, FaClipboardList, FaUserEdit,  } from 'react-icons/fa';
+import { FaBoxOpen, FaListAlt, FaClipboardList, FaUserEdit, FaHome,  } from 'react-icons/fa';
 import { FaGear } from 'react-icons/fa6';
 import { GrAnalytics } from 'react-icons/gr';
+import { Link } from 'react-router-dom';
 
 const Sidebar = ({ isSidebarOpen, activeTab, setActiveTab }) => {
   return (
@@ -36,6 +37,12 @@ const Sidebar = ({ isSidebarOpen, activeTab, setActiveTab }) => {
             Settings
           </h3>
         </div>
+
+        
+        <Link to={'/'} className='flex space-x-1 items-center'>
+          <FaHome className='text-white text-2lx mr-2'/> Home
+        
+        </Link>
       </div>
     </div>
   );
