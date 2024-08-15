@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, auth } from '../firebase';
 import Modal from './Modal';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { FaGoogle } from 'react-icons/fa'; // Add Google icon
 
 const SignUp = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -13,19 +14,19 @@ const SignUp = ({ onClose }) => {
     email: '',
     password: '',
     phone: '',
-    role: 'Vendor', // Default to Vendor
-    shopName: '', // Vendor-specific
-    bikeDetails: '', // Rider-specific
-    profilePicture: null, // Profile picture
-    location: '', // New field for location
+    role: 'Vendor', 
+    shopName: '', 
+    bikeDetails: '', 
+    profilePicture: null, 
+    location: '', 
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isLogin, setIsLogin] = useState(false); // State to toggle between SignUp and Login
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [isLogin, setIsLogin] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false); 
 
   const navigate = useNavigate();
-  const storage = getStorage(); // Firebase Storage instance
+  const storage = getStorage(); 
 
   const { name, email, password, phone, role, shopName, bikeDetails, profilePicture, location } = formData;
 
@@ -43,53 +44,92 @@ const SignUp = ({ onClose }) => {
     setError(null);
 
     try {
-      // Create user with Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Prepare the user data to store in Firestore
       let userData = {
         name,
         email,
         phone,
         role,
-        location, // Add location to user data
+        location, 
         timeStamp: serverTimestamp(),
-        ...(role === 'Vendor' && { shopName }), // Include shopName only if the role is Vendor
-        ...(role === 'Rider' && { bikeDetails }), // Include bikeDetails only if the role is Rider
+        ...(role === 'Vendor' && { shopName }), 
+        ...(role === 'Rider' && { bikeDetails }), 
       };
 
-      // Handle profile picture upload if provided
       if (profilePicture) {
         const profilePicRef = ref(storage, `profilePictures/${user.uid}/${profilePicture.name}`);
         await uploadBytes(profilePicRef, profilePicture);
         const profilePicURL = await getDownloadURL(profilePicRef);
-        userData.profilePictureURL = profilePicURL; // Add profile picture URL to userData
+        userData.profilePictureURL = profilePicURL; 
       }
 
-      // Store the user data in Firestore using the user's UID as the document ID
       await setDoc(doc(db, 'users', user.uid), userData);
 
-      toast.success("Account created Kindly login");
+      toast.success("Account created! Kindly login");
 
-      // Redirect based on role
-      // if (role === 'Vendor') {
-      //   navigate('/vendor/dashboard');
-      // } else if (role === 'Rider') {
-      //   navigate('/rider/dashboard');
-      // } else if (role === 'Admin') {
-      //   navigate('/admin/dashboard');
-      // } else if (role === 'Customer') {
-      //   navigate('/orders/create');
-      // }
-        navigate('/')
+      if (role === 'Vendor') {
+        navigate('/vendor/dashboard');
+      } else if (role === 'Rider') {
+        navigate('/rider/dashboard');
+      } else if (role === 'Admin') {
+        navigate('/admin/dashboard');
+      } else if (role === 'Customer') {
+        navigate('/orders/create');
+      }
+      
       setLoading(false);
-      onClose(); // Close the modal after successful sign-up
-
+      onClose(); 
     } catch (error) {
       setError(error.message);
       toast.error("Oops, there was an error");
       setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Check if user exists in Firestore, if not, create a new document
+      const userRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(userRef);
+
+      if (!docSnap.exists()) {
+        await setDoc(userRef, {
+          name: user.displayName,
+          email: user.email,
+          phone: user.phoneNumber,
+          profilePictureURL: user.photoURL,
+          role: 'Customer',
+          location: '', 
+          timeStamp: serverTimestamp(),
+        });
+      }
+
+      toast.success("Logged in with Google!");
+      navigate('/orders/create'); 
+      onClose(); 
+    } catch (error) {
+      setError(error.message);
+      toast.error("Google sign-in failed");
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!email) {
+      toast.error("Please enter your email");
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      toast.success("Password reset email sent!");
+    } catch (error) {
+      toast.error("Error sending reset email");
     }
   };
 
@@ -206,7 +246,7 @@ const SignUp = ({ onClose }) => {
                   />
                 </div>
               )}
-              {role === 'Rider' && (
+                            {role === 'Rider' && (
                 <div className="mb-4">
                   <label className="block text-gray-700 mb-2" htmlFor="bikeDetails">Bike Details</label>
                   <input
@@ -224,40 +264,55 @@ const SignUp = ({ onClose }) => {
               <div className="mb-4">
                 <label className="block text-gray-700 mb-2" htmlFor="profilePicture">Profile Picture</label>
                 <input
-type="file"
-id="profilePicture"
-name="profilePicture"
-accept="image/*"
-onChange={handleInputChange}
-className="w-full p-3 text-s2 border rounded shadow-sm focus
-focus
-"
-/>
-</div>
-<button
-             type="submit"
-             className="w-full bg-blue-500 text-white p-3 rounded shadow hover:bg-blue-600 transition duration-300"
-             disabled={loading}
-           >
-{loading ? <span className="spinner-border spinner-border-sm"></span> : 'Sign Up'}
-</button>
-</form>
-<p className="mt-4 text-center text-primary">
-Already have an account?{' '}
-<button
-onClick={() => setIsLogin(true)}
-className="text-blue-500 hover
-"
->
-Login
-</button>
-</p>
-</>
-)}
-</Modal>
-<ToastContainer />
-</div>
-);
+                  type="file"
+                  id="profilePicture"
+                  name="profilePicture"
+                  accept="image/*"
+                  onChange={handleInputChange}
+                  className="w-full p-3 text-s2 border rounded shadow-sm focus:outline-none focus:border-blue-500"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-white p-3 rounded shadow hover:bg-blue-600 transition duration-300"
+                disabled={loading}
+              >
+                {loading ? <span className="spinner-border spinner-border-sm"></span> : 'Sign Up'}
+              </button>
+            </form>
+            <div className="mt-4">
+              <button
+                onClick={handleGoogleSignIn}
+                className="w-full flex items-center justify-center bg-red-500 text-white p-3 rounded shadow hover:bg-red-600 transition duration-300"
+              >
+                <FaGoogle className="mr-2" />
+                Sign Up with Google
+              </button>
+            </div>
+            <p className="mt-4 text-center text-primary">
+              Already have an account?{' '}
+              <button
+                onClick={() => setIsLogin(true)}
+                className="text-blue-500 hover:underline"
+              >
+                Login
+              </button>
+            </p>
+            <p className="mt-2 text-center text-primary">
+              Forgot your password?{' '}
+              <button
+                onClick={handleResetPassword}
+                className="text-blue-500 hover:underline"
+              >
+                Reset Password
+              </button>
+            </p>
+          </>
+        )}
+      </Modal>
+      <ToastContainer />
+    </div>
+  );
 };
 
 export default SignUp;

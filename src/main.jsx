@@ -7,12 +7,13 @@ import './index.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './Helpers/AuthContext';
-
+import Navbar from './Components/Navbar';
 const router = createBrowserRouter(routes);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
+
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -26,7 +27,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         theme="dark"
       />
     
-      <RouterProvider router={router} />
+      <RouterProvider router={router} >
+
+      <Navbar />
+
+      </RouterProvider>
     </AuthProvider>
   </React.StrictMode>
 );

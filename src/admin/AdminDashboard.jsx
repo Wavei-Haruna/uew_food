@@ -6,6 +6,7 @@ import CreateVendor from './vendors/CreateVendor';
 import AdminStatistics from './AdminStatistics';
 import OrderDetails from './Orderdetials';
 import ProfileSettings from './ProfileSettings';
+import Navbar from '../Components/Navbar';
 
 
 const AdminDashboard = () => {
@@ -18,6 +19,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
+      {/* <Navbar/> */}
       <Sidebar isSidebarOpen={isSidebarOpen} activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className={`flex-1 p-6 container mx-auto transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
         {/* {activeTab === 'vendors' && <CreateVendor />}

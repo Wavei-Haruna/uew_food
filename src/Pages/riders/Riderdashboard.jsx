@@ -5,6 +5,7 @@ import TrackDeliveries from './TrackDelivery'; // Placeholder component for trac
 import ManageOrders from './ManageOrders'; // Placeholder component for managing orders
 import Statistics from './Statistics';
 import RiderProfileSettings from './RiderProfileSettings';
+import Navbar from '../../Components/Navbar';
 
 const RiderDashboard = () => {
   const [activeTab, setActiveTab] = useState('deliveries');
@@ -16,6 +17,7 @@ const RiderDashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
+      {/* <Navbar/> */}
       <Sidebar isSidebarOpen={isSidebarOpen} activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className={`flex-1 p-6 mx-auto container transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
         {activeTab === 'deliveries' && <TrackDeliveries />}
