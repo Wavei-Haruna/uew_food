@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase';
+import { signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth, db } from '../firebase'; // Ensure db is imported
 import Modal from './Modal';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import useAuth from '../Hooks/useAuth';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase'; // Ensure this is imported correctly
+import { FaGoogle } from 'react-icons/fa'; // Import Google icon
 
 const Login = ({ onClose }) => {
   const navigate = useNavigate();
@@ -97,6 +97,46 @@ const Login = ({ onClose }) => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      setCurrentUser(user);
+      toast.success("Successfully signed in with Google");
+
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const role = userData.role || 'user';
+
+        if (role === 'admin') {
+          navigate('/admin/dashboard');
+        } else if (role === 'Vendor') {
+          navigate('/vendor/dashboard');
+        } else if (role === 'Rider') {
+          navigate('/rider/dashboard');
+        } else {
+          navigate('/'); // Default redirect if no matching role
+        }
+      } else {
+        console.error('No such document!');
+        navigate('/'); // Default redirect if user document is not found
+      }
+
+      setLoading(false);
+      onClose(); // Close the modal after successful login
+    } catch (error) {
+      setError(error.message);
+      toast.error("Failed to sign in with Google");
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center bg-gray-100">
       <Modal isVisible={true} onClose={onClose}>
@@ -144,6 +184,16 @@ const Login = ({ onClose }) => {
             {loading ? <span className="spinner-border spinner-border-sm"></span> : 'Login'}
           </button>
         </form>
+        <div className="mt-4">
+          <button
+            onClick={handleGoogleSignIn}
+            className="w-full flex items-center justify-center bg-red-500 text-white p-3 rounded shadow hover:bg-red-600 transition duration-300"
+            disabled={loading || authLoading}
+          >
+            <FaGoogle className="mr-2" />
+            Sign In with Google
+          </button>
+        </div>
         <p className="mt-4 text-center">
           <button
             onClick={handleForgotPassword}
