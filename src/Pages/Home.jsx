@@ -14,7 +14,7 @@ export default function Home() {
         <div className="flex flex-col justify-center items-center h-full text-center text-white relative">
           <div className="bg-black opacity-60 h-full w-screen absolute top-0"></div>
           <motion.h1 
-            className="text-5xl z-10 font-bold mb-6 font-primary text-white"
+            className="lg:text-5xl text-2xl z-10 font-bold mb-6 font-primary text-white"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -106,11 +106,11 @@ export default function Home() {
           >
             <motion.div className="bg-blue-600 rounded-lg p-8 shadow-lg">
               <p className="italic mb-4">"The best food delivery service I've ever used! The meals are always delicious and delivered on time."</p>
-              <h4 className="text-2xl font-semibold">- Jane Doe</h4>
+              <h4 className="text-2xl font-semibold">- Dr Tatra</h4>
             </motion.div>
             <motion.div className="bg-blue-600 rounded-lg p-8 shadow-lg">
               <p className="italic mb-4">"Amazing variety of dishes and top-notch quality. Highly recommended!"</p>
-              <h4 className="text-2xl font-semibold">- John Smith</h4>
+              <h4 className="text-2xl font-semibold">- Haruna Wavei</h4>
             </motion.div>
           </motion.div>
         </div>
@@ -172,7 +172,7 @@ export default function Home() {
             </motion.div>
             <motion.div className="text-center">
               <h3 className="text-2xl font-bold text-gray-800 mb-2">Phone</h3>
-              <p className="text-gray-600">+233 123 456 789</p>
+              <p className="text-gray-600">+233 551 837 449</p>
             </motion.div>
             <motion.div className="text-center">
               <h3 className="text-2xl font-bold text-gray-800 mb-2">Address</h3>
