@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../firebase';
-import Loader from '../../Components/Loader';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
+import Loader from '../Components/Loader';
 import Swal from 'sweetalert2';
 import { FaCediSign } from 'react-icons/fa6';
-import { Pie, Bar } from 'react-chartjs-2';
-import 'chart.js/auto';
-import useAuth from '../../Hooks/useAuth'; // Import useAuth hook
+import { Pie, Bar } from 'react-chartjs-2'; // Assuming you're using react-chartjs-2
+import 'chart.js/auto'; // Ensure you have Chart.js installed
 
 const StatisticsPage = () => {
-  const { currentUser } = useAuth(); // Get currentUser from useAuth hook
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({
@@ -21,26 +19,13 @@ const StatisticsPage = () => {
   });
 
   useEffect(() => {
-    const fetchStatistics = async () => {
-      if (!currentUser) return; // Wait for the user to be authenticated
-
+    const fetchOrders = async () => {
       setLoading(true);
       try {
-        // Step 1: Get all items created by this vendor
-        const itemsQuery = query(collection(db, 'items'), where('createdBy', '==', currentUser.uid));
-        const itemsSnapshot = await getDocs(itemsQuery);
-        const vendorItemIds = itemsSnapshot.docs.map(doc => doc.id);
+        const querySnapshot = await getDocs(collection(db, 'orders'));
+        const ordersList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-        if (vendorItemIds.length === 0) {
-          throw new Error('No items found for this vendor');
-        }
-
-        // Step 2: Get orders that contain these items
-        const ordersQuery = query(collection(db, 'orders'), where('itemId', 'in', vendorItemIds));
-        const ordersSnapshot = await getDocs(ordersQuery);
-        const ordersList = ordersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-        // Step 3: Calculate statistics
+        // Calculate statistics
         const totalOrders = ordersList.length;
         const pendingOrders = ordersList.filter(order => order.orderStatus === 'Pending').length;
         const completedOrders = ordersList.filter(order => order.orderStatus === 'Delivered').length;
@@ -61,19 +46,19 @@ const StatisticsPage = () => {
           totalRevenue,
         });
       } catch (error) {
-        console.error('Error fetching statistics:', error);
+        console.error('Error fetching orders:', error);
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: error.message || 'We had an issue with your statistics',
+          text: 'We had an issue with your statistics',
         });
       } finally {
         setLoading(false);
       }
     };
 
-    fetchStatistics();
-  }, [currentUser]);
+    fetchOrders();
+  }, []);
 
   // Data for charts
   const orderStatusData = {
@@ -104,7 +89,6 @@ const StatisticsPage = () => {
         <Loader />
       ) : (
         <>
-          <h2 className="text-2xl font-bold mb-6 text-center">Statistics for Vendor</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-lg shadow-lg">
               <h3 className="text-lg font-bold mb-4">Total Orders</h3>

@@ -6,6 +6,7 @@ import { Bar } from 'react-chartjs-2';
 import Loader from '../Components/Loader';
 import Swal from 'sweetalert2';
 import 'chart.js/auto';
+import StatisticsPage from './StatisticsPage';
 
 const AdminStatistics = () => {
   const [users, setUsers] = useState([]);
@@ -115,6 +116,8 @@ const AdminStatistics = () => {
               <Bar data={orderChartData} />
             </div>
           </div>
+          {/* More Detials */}
+          <StatisticsPage/>
 
           {/* User Table */}
           <div className="mt-8">

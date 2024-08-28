@@ -39,7 +39,7 @@ const Sidebar = ({ isSidebarOpen, activeTab, setActiveTab }) => {
         </div>
 
         
-        <Link to={'/'} className='flex space-x-1 items-center'>
+        <Link to={'/'} className='flex space-x-1 items-center p-3'>
           <FaHome className='text-white text-2lx mr-2'/> Home
         
         </Link>
