@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaTruck, FaStore, FaBoxOpen, FaListAlt, FaClipboardList, FaUserEdit, FaHome } from 'react-icons/fa';
+import { GrAnalytics } from 'react-icons/gr';
 import { Link } from 'react-router-dom';
 const Sidebar = ({ isSidebarOpen, activeTab, setActiveTab }) => {
   return (
@@ -14,8 +15,8 @@ const Sidebar = ({ isSidebarOpen, activeTab, setActiveTab }) => {
             className={`p-3 rounded cursor-pointer flex items-center ${activeTab === 'reports' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
             onClick={() => setActiveTab('reports')}
           >
-            <FaClipboardList className="mr-2" />
-            Overview
+            <GrAnalytics className="mr-2" />
+            Statistics
           </li>
           <li
             className={`p-3 rounded cursor-pointer flex items-center ${activeTab === 'orders' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
@@ -43,7 +44,7 @@ const Sidebar = ({ isSidebarOpen, activeTab, setActiveTab }) => {
         </div>
 
         
-        <Link to={'/'} className='flex space-x-1 items-center'>
+        <Link to={'/'} className='flex p-3 space-x-1 items-center'>
           <FaHome className='text-white text-2lx mr-2'/> Home
         
         </Link>
