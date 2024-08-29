@@ -76,7 +76,7 @@ const SignUp = ({ onClose }) => {
       } else if (role === 'Admin') {
         navigate('/admin/dashboard');
       } else if (role === 'Customer') {
-        navigate('/orders/create');
+        navigate('/order/create');
       }
       
       setLoading(false);
@@ -111,7 +111,7 @@ const SignUp = ({ onClose }) => {
       }
 
       toast.success("Logged in with Google!");
-      navigate('/orders/create'); 
+      navigate('/order/create'); 
       onClose(); 
     } catch (error) {
       setError(error.message);
