@@ -19,10 +19,5 @@ export const  NavItems = [
     to:'/how-it-works'
 
 },
-{
-    title:"Contact Us",
-    id:4,
-    to:'/contact-us'
 
-},
 ]
