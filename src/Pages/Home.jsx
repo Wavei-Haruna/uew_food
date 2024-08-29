@@ -226,7 +226,7 @@ export default function Home() {
             </motion.div>
             <motion.div className="text-center">
               <h3 className="text-2xl font-bold text-gray-800 mb-2">Phone</h3>
-              <p className="text-gray-600">+233 551 837 449</p>
+              <p className="text-gray-600">+233 20 0545107</p>
             </motion.div>
             <motion.div className="text-center">
               <h3 className="text-2xl font-bold text-gray-800 mb-2">Address</h3>
