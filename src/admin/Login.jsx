@@ -39,6 +39,8 @@ const Login = ({ onClose }) => {
             navigate('/vendor/dashboard');
           } else if (role === 'Rider') {
             navigate('/rider/dashboard');
+          } else if (role === 'Customer') {
+            navigate('/order/create');
           } else {
             navigate('/'); // Default redirect if no matching role
           }
@@ -120,6 +122,8 @@ const Login = ({ onClose }) => {
           navigate('/vendor/dashboard');
         } else if (role === 'Rider') {
           navigate('/rider/dashboard');
+        } else if (role === 'Customer') {
+          navigate('/order/create');
         } else {
           navigate('/'); // Default redirect if no matching role
         }

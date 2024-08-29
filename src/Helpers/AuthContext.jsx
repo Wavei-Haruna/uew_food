@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
           if (userDoc.exists()) {
             const userData = userDoc.data();
             console.log(userData);
-            const fetchedUserRole = userData.role || 'user'; // Default role if not found
+            const fetchedUserRole = userData.role || 'Customer'; // Default role if not found
             console.log('User role fetched:', fetchedUserRole); // Log user role
             setCurrentUser({ ...user, role: fetchedUserRole });
             setUserRole(fetchedUserRole); // Set user role
