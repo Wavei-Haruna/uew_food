@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import useAuth from '../../Hooks/useAuth';
 import { useNavigate } from 'react-router';
 import { FaCediSign } from 'react-icons/fa6';
+import Navbar from '../../Components/Navbar';
 
 const CreateOrderPage = () => {
   const { currentUser, loading: authLoading } = useAuth();
@@ -81,7 +82,11 @@ const CreateOrderPage = () => {
   };
 
   return (
+    <section>
+      <Navbar/>
     <div className="max-w-6xl mx-auto p-4"> 
+
+    
       {loading || authLoading ? (
         <Loader />
       ) : (
@@ -112,6 +117,7 @@ const CreateOrderPage = () => {
         </>
       )}
     </div>
+    </section>
   );
 };
 

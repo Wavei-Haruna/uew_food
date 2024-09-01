@@ -76,7 +76,7 @@ const SignUp = ({ onClose }) => {
       } else if (role === 'Admin') {
         navigate('/admin/dashboard');
       } else if (role === 'Customer') {
-        navigate('/order/create');
+        navigate('/customer');
       }
       
       setLoading(false);

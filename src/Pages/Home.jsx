@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import Sadat from '../assets/Images/sadat.jpg'
 import Richard from '../assets/Images/richard.jpg'
 import Haruna from '../assets/Images/haruna.jpg'
+import UserDashboard from './customer/UserDashboard';
 export default function Home() {
   return (
     <div>
@@ -70,6 +71,7 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+      {/* <UserDashboard/> */}
       {/* Team Section */}
       {/* <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">

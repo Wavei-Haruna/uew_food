@@ -4,36 +4,46 @@ import { NavItems } from '../Utils/NavItems';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
 import SignUp from '../admin/SignUp';
 import Login from '../admin/Login';
+import { signOut } from 'firebase/auth';
+import { auth,  } from '../firebase';
 import Logo from '../assets/Images/logo.png';
+import useAuth from '../Hooks/useAuth'; // Assuming you have a custom hook for authentication
+import { toast } from 'react-toastify';
 
 export default function Navbar() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [role, setRole] = useState(null);
 
+  const { currentUser, } = useAuth(); // Use custom hook to get current user and signOut function
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Simulate checking if the user is authenticated and retrieving the role
-    // You can replace this with actual logic to check authentication and fetch the user's role
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user) {
-      setIsAuthenticated(true);
-      setRole(user.role);
-    }
-  }, []);
+    // No need for localStorage since we use the auth hook
+  }, [currentUser]);
 
   const handleDashboardClick = () => {
+    const role = currentUser?.role;
     if (role === 'Vendor') {
       navigate('/vendor/dashboard');
     } else if (role === 'Rider') {
       navigate('/rider/dashboard');
-    } else if (role === 'Admin') {
+    } else if (role === 'admin') {
       navigate('/admin/dashboard');
     } else if (role === 'Customer') {
-      navigate('/orders/create');
+      navigate('/customer');
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      toast.success('Logged out successfully');
+
+      navigate('/')
+    } catch (error) {
+      console.error('Error logging out:', error);
+      toast.error('Failed to log out');
     }
   };
 
@@ -90,13 +100,21 @@ export default function Navbar() {
       </div>
       <div className="flex items-center space-x-8">
         <img src={Logo} alt="Logo" className="h-8" />
-        {isAuthenticated ? (
-          <button
-            className="z-10 md:static w-32 px-3 py-1 bg-white text-primary mr-8 border border-blue-500 h-fit font-semibold rounded-md text-center overflow-hidden hover:bg-blue-600"
-            onClick={handleDashboardClick}
-          >
-            Dashboard
-          </button>
+        {currentUser ? (
+          <>
+            <button
+              className="z-10 md:static w-32 px-3 py-1 bg-white text-primary mr-8 border border-blue-500 h-fit font-semibold rounded-md text-center overflow-hidden hover:bg-blue-600"
+              onClick={handleDashboardClick}
+            >
+              Dashboard
+            </button>
+            <button
+              className="z-10 md:static px-3 py-1 font-semibold w-32 bg-red-500 h-fit text-white rounded-md text-center overflow-hidden hover:bg-red-600"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </>
         ) : (
           <>
             <button
