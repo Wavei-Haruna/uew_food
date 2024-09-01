@@ -1,17 +1,17 @@
 import React from 'react';
 import Home from './Pages/Home';
 import HowItWorks from './Sections/HowItWorks';
-
 import SignUp from './admin/SignUp';
 import AdminDashboard from './admin/AdminDashboard';
 import VendorDashboard from './Pages/vendor/VendorDashboard';
 import RiderDashboard from './Pages/riders/Riderdashboard';
 import CreateOrderPage from './Pages/orders/CreateOrder';
-import PrivateRoute from './Components/PrivateRoute'; // Adjust path if necessary
+import PrivateRoute from './Components/PrivateRoute'; 
 import Navbar from './Components/Navbar';
+import UserDashboard from './Pages/customer/UserDashboard'; // Adjust path if necessary
 
+<Navbar />
 
-<Navbar/>
 export const routes = [
   {
     path: '/',
@@ -25,9 +25,6 @@ export const routes = [
     path: 'signup',
     element: <SignUp />,
   },
-
-
-  
   {
     path: 'admin',
     element: <PrivateRoute requiredRole="admin" />,
@@ -54,6 +51,14 @@ export const routes = [
     element: <PrivateRoute requiredRole="Rider" />,
     children: [
       { path: 'dashboard', element: <RiderDashboard /> },
+    ],
+  },
+  {
+    path: 'customer',
+    element: <PrivateRoute requiredRole="Customer" />,
+    children: [
+      // { path: 'dashboard', element: <Customer /> },
+      { path: '', element: <UserDashboard /> },
     ],
   },
 ];
