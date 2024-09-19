@@ -23,7 +23,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Welcome to <span className="text-blue-500">UEW</span><span className="text-yellow-500">OnlineFood</span>
+            Welcome to <span className="text-blue-500">Kampu</span><span className="text-yellow-500">Order</span>
           </motion.h1>
           <motion.p 
             className="text-lg z-10 mb-8"
@@ -197,7 +197,7 @@ export default function Home() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
           >
-            At UEW OnlineFood, we are dedicated to bringing you the best food ordering experience. Whether you're a student, staff, or visitor, our platform allows you to explore a wide variety of meals from local vendors. We prioritize quality, convenience, and customer satisfaction, making food delivery a breeze.
+            At Kampu OnlineFood, we are dedicated to bringing you the best food ordering experience. Whether you're a student, staff, or visitor, our platform allows you to explore a wide variety of meals from local vendors. We prioritize quality, convenience, and customer satisfaction, making food delivery a breeze.
           </motion.p>
           <motion.p 
             className="text-lg text-gray-700"
@@ -224,7 +224,7 @@ export default function Home() {
           >
             <motion.div className="text-center">
               <h3 className="text-2xl font-bold text-gray-800 mb-2">Email</h3>
-              <p className="text-gray-600">support@onlinefood.UEW.edu.gh</p>
+              <p className="text-gray-600">support@kampuorder.com</p>
             </motion.div>
             <motion.div className="text-center">
               <h3 className="text-2xl font-bold text-gray-800 mb-2">Phone</h3>
@@ -232,7 +232,7 @@ export default function Home() {
             </motion.div>
             <motion.div className="text-center">
               <h3 className="text-2xl font-bold text-gray-800 mb-2">Address</h3>
-              <p className="text-gray-600">UEW Campus, Winneba, Ghana</p>
+              <p className="text-gray-600">Kumasi, AAMUSTED Ghana</p>
             </motion.div>
           </motion.div>
         </div>
@@ -277,10 +277,10 @@ export default function Home() {
             </motion.a>
           </motion.div>
           <p className="text-gray-400 mb-4">
-            &copy; {new Date().getFullYear()} UEW OnlineFood. All rights reserved.
+            &copy; {new Date().getFullYear()} Kampu OnlineFood. All rights reserved.
           </p>
           <p className="text-gray-400">
-            Designed with ♥ by UEW Tech Team
+            Trusted  ♥ by FinfactGlobal
           </p>
         </div>
       </footer>

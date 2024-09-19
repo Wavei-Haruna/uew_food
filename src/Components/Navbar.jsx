@@ -6,7 +6,7 @@ import SignUp from '../admin/SignUp';
 import Login from '../admin/Login';
 import { signOut } from 'firebase/auth';
 import { auth,  } from '../firebase';
-import Logo from '../assets/Images/logo.png';
+// import Logo from '../assets/Images/logo.png';
 import useAuth from '../Hooks/useAuth'; // Assuming you have a custom hook for authentication
 import { toast } from 'react-toastify';
 
@@ -99,7 +99,9 @@ export default function Navbar() {
         </ul>
       </div>
       <div className="flex items-center space-x-8">
-        <img src={Logo} alt="Logo" className="h-8" />
+        {/* <img src={Logo} alt="Logo" className="h-8" /> */}
+       
+        <h3 className='font-bold bg-white px-3 py-1 rounded-md'><span className="text-blue-500">Kampu</span><span className="text-yellow-500">Order</span></h3>
         {currentUser ? (
           <>
             <button
